@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:todos/model/user_todos.dart';
-import 'package:todos/services/todos_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:todos/view/cubit/cubit/to_dos_cubit.dart';
 
 class TodoScreenlist extends StatefulWidget {
   const TodoScreenlist({super.key});
@@ -10,36 +10,35 @@ class TodoScreenlist extends StatefulWidget {
 }
 
 class _TodoScreenlistState extends State<TodoScreenlist> {
-  List<UserToDos> todos = [];
-  bool isloading = true;
-  gettodo() async {
-    todos = await ToDosServices().gettodos();
-    isloading = false;
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    gettodo();
-  }
-
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        appBar: AppBar(),
-        body: isloading
-            ? Center(
-                child: CircularProgressIndicator(),
-              )
-            : ListView.builder(
-                itemCount: todos.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ListTile(
-                    title: Text(todos[index].title ?? ""),
-                  );
-                },
-              ));
+    return BlocProvider(
+      create: (context) => ToDosCubit(),
+      child: BlocConsumer(
+        listener: (context, state) {
+          if (state is ToDosLoading) {
+            print("Loading");
+          }
+        },
+        builder: (context, state) {
+          return state is ToDosLoading
+              ? Center(child: CircularProgressIndicator())
+              : state is ToDosSuccess
+                  ? ListView.builder(
+                      itemCount: context.watch<ToDosCubit>().todos.length,
+                      itemBuilder: (BuildContext context, int index) {
+                        return ListTile(
+                          title: Text(
+                              context.watch<ToDosCubit>().todos[index].title ??
+                                  ""),
+                        );
+                      },
+                    )
+                  : Center(
+                      child: Text("Error"),
+                    );
+        },
+      ),
+    );
   }
 }
