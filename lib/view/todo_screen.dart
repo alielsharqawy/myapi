@@ -15,30 +15,59 @@ class _TodoScreenlistState extends State<TodoScreenlist> {
     return BlocProvider(
       create: (context) => ToDosCubit(),
       child: BlocConsumer(
-        listener: (context, state) {
-          if (state is ToDosLoading) {
-            print("Loading");
+          listener: (context, state) {
+             if (state is ToDosLoading) {
+           // ignore: avoid_print
+           print("Loading");
           }
-        },
-        builder: (context, state) {
-          return state is ToDosLoading
-              ? Center(child: CircularProgressIndicator())
-              : state is ToDosSuccess
-                  ? ListView.builder(
-                      itemCount: context.watch<ToDosCubit>().todos.length,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ListTile(
-                          title: Text(
+          },
+          builder: (context, state) {
+            return state is ToDosLoading
+                ? const Center(child: CircularProgressIndicator())
+                : state is ToDosSuccess
+                    ? ListView.builder(
+                        itemCount: context.watch<ToDosCubit>().todos.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          return ListTile(
+                            title: Text(
                               context.watch<ToDosCubit>().todos[index].title ??
-                                  ""),
-                        );
-                      },
-                    )
-                  : Center(
-                      child: Text("Error"),
-                    );
-        },
-      ),
+                                  "",
+                            ),
+                          );
+                        },
+                      )
+                    : const Center(
+                        child: Text("Error"),
+                      );
+          }),
     );
   }
 }
+
+
+// BlocProvider(
+//       create: (context) => ToDosCubit(),
+//       child: BlocConsumer(
+//         listener: (context, state) {
+//          
+//         },
+//         builder: (context, state) {
+//           return state is ToDosLoading
+//               ? const Center(child: CircularProgressIndicator())
+//               : state is ToDosSuccess
+//                   ? ListView.builder(
+//                       itemCount: context.watch<ToDosCubit>().todos.length,
+//                       itemBuilder: (BuildContext context, int index) {
+//                         return ListTile(
+//                           title: Text(
+//                               context.watch<ToDosCubit>().todos[index].title ??
+//                                   ""),
+//                         );
+//                       },
+//                     )
+//                   : const Center(
+//                       child: Text("Error"),
+//                     );
+//         },
+//       ),
+//     )

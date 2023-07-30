@@ -1,3 +1,9 @@
 {
-    "cmake.sourceDirectory": "C:/Users/aliel/flutterapp/myapi/linux"
+    "cmake.sourceDirectory": "C:/Users/aliel/flutterapp/myapi/linux",
+    "cSpell.words": [
+        "cupertino",
+        "gettodos",
+        "Screenlist",
+        "todos"
+    ]
 }
